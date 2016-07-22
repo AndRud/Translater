@@ -1,5 +1,6 @@
 package com.andrutyk.translater.ui;
 
+import android.content.IntentFilter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +14,16 @@ import com.andrutyk.translater.R;
 import com.andrutyk.translater.api.response.Response;
 import com.andrutyk.translater.content.TranslatedText;
 import com.andrutyk.translater.loaders.TranslatedLoader;
-import com.andrutyk.translater.utils.NetworkUtil;
+import com.andrutyk.translater.utils.NetworkChangeReceiver;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Response>, View.OnClickListener {
 
     private final static String API_KEY = "trnsl.1.1.20160721T085454Z.e6ccaed5ee786c94.009d9a8304b0873ea10cd1133ac59d880367a6e9";
     private final static String LANG = "en-uk";
+
+    private NetworkChangeReceiver networkChangeReceiver = new NetworkChangeReceiver();
+
+    private static MainActivity ins;
 
     private TextView tvInternetConn;
     private EditText edtInputText;
@@ -29,19 +34,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ins = this;
 
         tvInternetConn = (TextView) findViewById(R.id.tvInternetConn);
         edtInputText = (EditText) findViewById(R.id.edtInputText);
         tvTextResult = (TextView) findViewById(R.id.tvTextResult);
         pbTranslating = (ProgressBar) findViewById(R.id.pbTranslating);
+        registerInternetConnReceiver();
         setVisiblyProgressBar(false);
-        checkConnectivity();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        checkConnectivity();
+    protected void onDestroy() {
+        unregisterReceiver(networkChangeReceiver);
+        super.onDestroy();
+    }
+
+    public static MainActivity getInstace() {
+        return ins;
     }
 
     @Override
@@ -84,12 +94,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    private void checkConnectivity() {
-        int conn = NetworkUtil.getConnectivityStatus(this);
-        if (conn == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-            tvInternetConn.setText(getString(R.string.is_offline));
-        } else {
-            tvInternetConn.setText(getString(R.string.is_online));
-        }
+    public void setTvInternetConn(final boolean isOnline) {
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (isOnline) {
+                    tvInternetConn.setText(getString(R.string.is_online));
+                } else {
+                    tvInternetConn.setText(getString(R.string.is_offline));
+                }
+            }
+        });
+    }
+
+    private void registerInternetConnReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        registerReceiver(networkChangeReceiver, intentFilter);
     }
 }
