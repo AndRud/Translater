@@ -5,26 +5,22 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.andrutyk.translater.R;
 import com.andrutyk.translater.api.response.Response;
 import com.andrutyk.translater.content.TranslatedText;
 import com.andrutyk.translater.loaders.TranslatedLoader;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.exceptions.RealmMigrationNeededException;
+import com.andrutyk.translater.utils.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Response>, View.OnClickListener {
 
     private final static String API_KEY = "trnsl.1.1.20160721T085454Z.e6ccaed5ee786c94.009d9a8304b0873ea10cd1133ac59d880367a6e9";
     private final static String LANG = "en-uk";
 
+    private TextView tvInternetConn;
     private EditText edtInputText;
     private TextView tvTextResult;
     private ProgressBar pbTranslating;
@@ -34,10 +30,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tvInternetConn = (TextView) findViewById(R.id.tvInternetConn);
         edtInputText = (EditText) findViewById(R.id.edtInputText);
         tvTextResult = (TextView) findViewById(R.id.tvTextResult);
         pbTranslating = (ProgressBar) findViewById(R.id.pbTranslating);
         setVisiblyProgressBar(false);
+        checkConnectivity();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnectivity();
     }
 
     @Override
@@ -77,6 +81,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         } else {
             tvTextResult.setVisibility(View.VISIBLE);
             pbTranslating.setVisibility(View.GONE);
+        }
+    }
+
+    private void checkConnectivity() {
+        int conn = NetworkUtil.getConnectivityStatus(this);
+        if (conn == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            tvInternetConn.setText(getString(R.string.is_offline));
+        } else {
+            tvInternetConn.setText(getString(R.string.is_online));
         }
     }
 }

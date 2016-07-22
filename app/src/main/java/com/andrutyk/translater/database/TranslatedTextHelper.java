@@ -19,7 +19,7 @@ public class TranslatedTextHelper {
         realm.commitTransaction();
     }
 
-    public static TranslatedText getTranslatedText(@NonNull Realm realm, @NonNull String originalText){
+    public static TranslatedText getTranslatedText(@NonNull Realm realm, @NonNull String originalText) {
         return realm.where(TranslatedText.class).equalTo(FIELD_ORIGINAL_TEXT, originalText).findFirst();
     }
 }

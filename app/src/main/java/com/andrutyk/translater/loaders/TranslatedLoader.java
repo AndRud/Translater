@@ -21,7 +21,7 @@ import retrofit2.Call;
 /**
  * Created by admin on 21.07.2016.
  */
-public class TranslatedLoader extends BaseLoader{
+public class TranslatedLoader extends BaseLoader {
 
     private final String apiKey;
     private final String text;
@@ -30,7 +30,7 @@ public class TranslatedLoader extends BaseLoader{
     private volatile TranslatedTextResponse translatedTextResponse;
 
     public TranslatedLoader(Context context, String apiKey, String text,
-                            String lang){
+                            String lang) {
         super(context);
         this.apiKey = apiKey;
         this.text = text;

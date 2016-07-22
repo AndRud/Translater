@@ -3,4 +3,6 @@
     <string name="translate">Перекласти</string>
     <string name="input_hint">Введіть текст (англ.)</string>
     <string name="result">Результат (укр.):</string>
+    <string name="is_online">Онлайн режим</string>
+    <string name="is_offline">Офлайн режим</string>
 </resources>

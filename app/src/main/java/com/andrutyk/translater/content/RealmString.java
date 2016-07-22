@@ -5,7 +5,7 @@ import io.realm.RealmObject;
 /**
  * Created by admin on 22.07.2016.
  */
-public class RealmString extends RealmObject{
+public class RealmString extends RealmObject {
 
     private String val;
 

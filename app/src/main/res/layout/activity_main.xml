@@ -9,6 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ui.MainActivity">
 
+    <TextView
+        android:id="@+id/tvInternetConn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
     <EditText
         android:id="@+id/edtInputText"
         android:layout_width="match_parent"
@@ -17,7 +23,8 @@
         android:hint="@string/input_hint"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLength="2000"
-        android:maxLines="4"/>
+        android:maxLines="4"
+        android:layout_below="@id/tvInternetConn"/>
 
     <Button
         android:id="@+id/btnTranslate"

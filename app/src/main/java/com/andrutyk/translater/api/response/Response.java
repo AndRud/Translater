@@ -19,11 +19,11 @@ public class Response {
     }
 
     @NonNull
-    public RequestResult getRequestResult(){
+    public RequestResult getRequestResult() {
         return mRequestResult;
     }
 
-    public Response setRequestResult(RequestResult requestResult){
+    public Response setRequestResult(RequestResult requestResult) {
         mRequestResult = requestResult;
         return this;
     }

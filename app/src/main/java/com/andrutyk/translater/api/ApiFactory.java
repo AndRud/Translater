@@ -43,7 +43,8 @@ public class ApiFactory {
         CLIENT.newBuilder().readTimeout(TIMEOUT, TimeUnit.SECONDS);
     }
 
-    private static final Type token = new TypeToken<RealmList<RealmString>>(){}.getType();
+    private static final Type token = new TypeToken<RealmList<RealmString>>() {
+    }.getType();
 
     private static final Gson GSON = new GsonBuilder()
             .setExclusionStrategies(new ExclusionStrategy() {
@@ -77,7 +78,7 @@ public class ApiFactory {
             .create();
 
     @NonNull
-    public static TranslateService getTranslateService(){
+    public static TranslateService getTranslateService() {
         return getRetrofit().create(TranslateService.class);
     }
 
